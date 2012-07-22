@@ -5,7 +5,8 @@ Game = () ->
   this.friend
 
 
-app = require('express').createServer(express.logger())
+express = require 'express'
+app = express.createServer(express.logger())
 port = process.env.PORT || 5000
 io = require('socket.io').listen app
 
