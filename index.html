@@ -2,19 +2,23 @@
 <html>
   <head>
     <title>Happy World Chat</title>
-    <link ref="stylesheet" href="http://twitter.github.com/bootstrap/assets/css/bootstrap.css" />
+    <link ref="stylesheet" type="text/css" href="//twitter.github.com/bootstrap/assets/css/bootstrap.css" />
+
+    <style tyle="text/css">
+      #messages { border: 1px solid black; }
+    </style>
   </head>
   <body>
     <h1>Happy World Chat</h1>
     <input type="text" autofocus="autofocus" />
+    <ol id="messages"></ol>
     <button type="button">publish</button>
     <button type="button">broadcast</button>
     <button type="button">whisper</button>
-    <p>Status: <span id="status">Undefined</span></p>
-    <ol id="messages"></ol>
+    <p>Status: <span id="status"> Connecting... </span></p>
     <script src="/socket.io/socket.io.js"></script>
-    <script src="http://code.jquery.com/jquery-latest.js"></script>
-    <script src="http://jashkenas.github.com/coffee-script/extras/coffee-script.js"></script>
+    <script src="//code.jquery.com/jquery-latest.js"></script>
+    <script src="//jashkenas.github.com/coffee-script/extras/coffee-script.js"></script>
     <script type="text/coffeescript">
 
       jQuery ($) ->
@@ -47,8 +51,6 @@
 
         $('button').click ->
           socket.emit $(this).text(), $input.val()
-          console.log $(this).text()
-          console.log $input.val()
           $input.val('').focus()
 
     </script>
