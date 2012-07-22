@@ -1,1 +1,1 @@
-web: node mighty.js
+web: coffee mighty.coffee --node.js
