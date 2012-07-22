@@ -11,7 +11,7 @@ io = require('socket.io').listen app
 
 app.listen port
 
-app.get '/', () ->
+app.get '/', (req, res) ->
   res.sendfile __dirname + '/index.html'
 
 io.sockets.on 'connection', (socket) ->

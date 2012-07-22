@@ -9,8 +9,7 @@
     return this.friend;
   };
 
-  express = require('express')
-  app = express.createServer(express.logger());
+  app = require('express').createServer(express.logger());
 
   port = process.env.PORT || 5000;
 
@@ -18,7 +17,7 @@
 
   app.listen(port);
 
-  app.get('/', function() {
+  app.get('/', function(req, res) {
     return res.sendfile(__dirname + '/index.html');
   });
 
