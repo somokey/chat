@@ -15,14 +15,16 @@ io.configure () ->
 
 io.sockets.on 'connection', (socket) ->
   socket.set 'nickname', '손님' + Math.floor(Math.random() * 100)
+
   socket.on 'publish', (message) ->
-    io.sockets.send message
+    socket.get 'nickname', (err, nickname) ->
+      io.sockets.send util.format "%s ▶ %s", nickname, message
 
   socket.on 'nick', (nickname) ->
-    socket.get 'nickname', (nickname_old) ->
+    socket.get 'nickname', (err, nickname_old) ->
       socket.set 'nickname', nickname, () ->
         socket.emit 'done'
-      io.sockets.send util.format("{0} renamed into {1}.", nickname_old, nickname)
+      io.sockets.send util.format "%s renamed into %s.", nickname_old, nickname
 
   socket.on 'broadcast', (message) ->
     socket.broadcast.send message
