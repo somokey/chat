@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Socket.IO demo</title>
+  </head>
+  <body>
+    <h1>Socket.IO demo</h1>
+    <input type="text" autofocus="autofocus" />
+    <button type="button">publish</button>
+    <button type="button">broadcast</button>
+    <button type="button">whisper</button>
+    <p>Status: <span id="status">Undefined</span></p>
+    <ol id="messages"></ol>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="http://jashkenas.github.com/coffee-script/extras/coffee-script.js"></script>
+    <script type="text/coffeescript">
+
+      jQuery ($) ->
+
+        $status = $ '#status'
+        socket = io.connect()
+
+        socket.on 'connect', ->
+          $status.text 'Connected'
+
+        socket.on 'disconnect', ->
+          $status.text 'Disconnected'
+
+        socket.on 'reconnecting', (seconds) ->
+          $status.text "Reconnecting in #{seconds} seconds"
+
+        socket.on 'reconnect', ->
+          $status.text 'Reconnected'
+
+        socket.on 'reconnect_failed', ->
+          $status.text 'Failed to reconnect'
+
+        socket.on 'message', (message) ->
+          $('<li>').text(message).appendTo $('#messages')
+
+        socket.on 'secret', (message) ->
+          console.log message
+
+        $input = $ 'input'
+
+        $('button').click ->
+          socket.emit $(this).text(), $input.val()
+          console.log $(this).text()
+          console.log $input.val()
+          $input.val('').focus()
+
+    </script>
+  </body>
+</html>
