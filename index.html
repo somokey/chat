@@ -18,8 +18,9 @@
     <div id="controls">
       <input type="text" autofocus="autofocus" />
       <button type="button">publish</button>
-      <button type="button">broadcast</button>
-      <button type="button">whisper</button>
+      <button type="button">who</button>
+      <button type="button">nick</button>
+      <button type="button">who</button>
     </div>
 
     <script src="/socket.io/socket.io.js"></script>
@@ -49,8 +50,8 @@
         socket.on 'message', (message) ->
           $('<li>').text(message).appendTo $('#messages')
 
-        socket.on 'secret', (message) ->
-          console.log message
+        socket.on 'who', (clients) ->
+          console.log clients
 
         $input = $ 'input'
 
