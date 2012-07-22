@@ -1,1 +1,1 @@
-web: coffee chat.coffee --node.js
+web: coffee chat.coffee
