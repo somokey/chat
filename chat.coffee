@@ -26,6 +26,11 @@ io.sockets.on 'connection', (socket) ->
         socket.emit 'done'
       io.sockets.send util.format "%s renamed into %s.", nickname_old, nickname
 
+  socket.on 'who', () ->
+    res = for own key, client of io.sockets.clients()
+      nickname: client.store.data.nickname
+    socket.emit 'who', res
+
   socket.on 'broadcast', (message) ->
     socket.broadcast.send message
 

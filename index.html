@@ -51,7 +51,9 @@
           $('<li>').text(message).appendTo $('#messages')
 
         socket.on 'who', (clients) ->
-          console.log clients
+          user_list = for own key, client of clients
+            client.nickname
+          $('<li>').text("#{user_list.join()} are in here. total #{user_list.length} people.").appendTo $('#messages')
 
         $input = $ 'input'
 
