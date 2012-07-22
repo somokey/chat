@@ -21,4 +21,3 @@ io.sockets.on 'connection', (socket) ->
 
   socket.on 'whisper', (message) ->
     socket.emit 'secret', message
-
