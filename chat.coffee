@@ -29,7 +29,9 @@ io.sockets.on 'connection', (socket) ->
     socket.get 'nickname', (err, nickname_old) ->
       socket.set 'nickname', nickname, () ->
         socket.emit 'done'
-        io.sockets.send util.format "%s renamed into %s.", nickname_old, nickname
+        io.sockets.emit 'nick'
+          nickname_old: nickname_old
+          nickname: nickname
 
   socket.on 'avatar', (avatar) ->
     socket.set 'avatar', avatar, () ->
