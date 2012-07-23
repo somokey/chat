@@ -74,6 +74,9 @@
           socket.emit $(this).text(), $input.val()
           $input.val('').focus()
 
+        $input.keydown (e) ->
+          $('button:first-of-type').click() if e.which == 13
+
     </script>
   </body>
 </html>
