@@ -42,6 +42,9 @@
             " ▶ " +
             $('<div/>').text(obj.message).html()).html()
 
+        scroll_bottom = () ->
+          $messages.scrollTop $messages.get(0).scrollHeight
+
         $status = $ '#status'
         socket = io.connect()
 
@@ -62,13 +65,16 @@
 
         socket.on 'publish', (obj) ->
           $('<li>').html(message_format obj).appendTo $('#messages')
+          scroll_bottom()
 
         socket.on 'who', (clients) ->
           user_list = for own key, client of clients
             client.nickname
           $('<li>').text("#{user_list.join()} are in here. total #{user_list.length} people.").appendTo $('#messages')
+          scroll_bottom()
 
         $input = $ 'input'
+        $messages = $ '#messages'
 
         $('button').click ->
           socket.emit $(this).text(), $input.val()
