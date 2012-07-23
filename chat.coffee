@@ -15,16 +15,25 @@ io.configure () ->
 
 io.sockets.on 'connection', (socket) ->
   socket.set 'nickname', '손님' + Math.floor(Math.random() * 100)
+  socket.set 'avatar', '00'
 
   socket.on 'publish', (message) ->
-    socket.get 'nickname', (err, nickname) ->
-      io.sockets.send util.format "%s ▶ %s", nickname, message
+    socket.get 'avatar', (err, avatar) ->
+      socket.get 'nickname', (err, nickname) ->
+        io.sockets.emit 'publish',
+          avatar: avatar
+          nickname: nickname
+          message: message
 
   socket.on 'nick', (nickname) ->
     socket.get 'nickname', (err, nickname_old) ->
       socket.set 'nickname', nickname, () ->
         socket.emit 'done'
-      io.sockets.send util.format "%s renamed into %s.", nickname_old, nickname
+        io.sockets.send util.format "%s renamed into %s.", nickname_old, nickname
+
+  socket.on 'avatar', (avatar) ->
+    socket.set 'avatar', avatar, () ->
+      socket.emit 'done'
 
   socket.on 'who', () ->
     res = for own key, client of io.sockets.clients()

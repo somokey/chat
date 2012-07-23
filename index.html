@@ -6,6 +6,8 @@
     <style tyle="text/css">
       #status-cnt { margin-right: 25px; position: absolute; right: 0; top: 40px;}
       #messages { border: 1px solid black; overflow-y: scroll; position: absolute; left: 0; right: 0; bottom: 30px; top: 40px;}
+      #messages > li { line-height: 25px; vertical-align: middle; }
+      #messages > li > img { vertical-align: top; }
       #controls { position: absolute; bottom: 0; height: 30px; overflow: hidden;
     </style>
 
@@ -20,7 +22,7 @@
       <button type="button">publish</button>
       <button type="button">who</button>
       <button type="button">nick</button>
-      <button type="button">who</button>
+      <button type="button">avatar</button>
     </div>
 
     <script src="/socket.io/socket.io.js"></script>
@@ -28,6 +30,15 @@
     <script src="//jashkenas.github.com/coffee-script/extras/coffee-script.js"></script>
     <script type="text/coffeescript">
       jQuery ($) ->
+        get_image_url_from_avatar = (avatar) ->
+          "http://webimg.cafe24.com/img/avatar/C/#{avatar}.gif"
+
+        message_format = (obj) ->
+          $('<div/>').append(
+            $('<img/>').attr('src', get_image_url_from_avatar obj.avatar)[0].outerHTML +
+            obj.nickname +
+            " ▶ " +
+            $('<div/>').text(obj.message).html()).html()
 
         $status = $ '#status'
         socket = io.connect()
@@ -47,8 +58,8 @@
         socket.on 'reconnect_failed', ->
           $status.text 'Failed to reconnect'
 
-        socket.on 'message', (message) ->
-          $('<li>').text(message).appendTo $('#messages')
+        socket.on 'publish', (obj) ->
+          $('<li>').html(message_format obj).appendTo $('#messages')
 
         socket.on 'who', (clients) ->
           user_list = for own key, client of clients
