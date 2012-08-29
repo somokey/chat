@@ -82,7 +82,7 @@
 
         socket.on 'who', (objects) ->
           $talkers.empty()
-          user_list = for key, obj of objects
+          for key, obj of objects
             $('<li>').html(talker_format obj).appendTo $talkers
 
 
@@ -96,11 +96,6 @@
           who()
         socket.on 'user disconnected', ->
           who()
-
-
-
-          $('<li>').text("#{user_list.join()} are in here. total #{user_list.length} people.").appendTo $messages
-          scroll_bottom()
 
         $input = $ 'input'
         $messages = $ '#messages'
