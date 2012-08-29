@@ -14,8 +14,10 @@ io.configure () ->
   io.set 'polling duration', 10
 
 io.sockets.on 'connection', (socket) ->
-  socket.set 'nickname', '손님' + Math.floor(Math.random() * 100)
-  socket.set 'avatar', '00'
+  socket.store.data.nickname = '손님' + Math.floor(Math.random() * 100)
+  socket.store.data.avatar = '00'
+
+  io.sockets.emit 'user connected'
 
   socket.on 'publish', (message) ->
     socket.get 'avatar', (err, avatar) ->
@@ -26,19 +28,16 @@ io.sockets.on 'connection', (socket) ->
           message: message
 
   socket.on 'nick', (nickname) ->
-    socket.get 'nickname', (err, nickname_old) ->
-      socket.set 'nickname', nickname, () ->
-        socket.emit 'done'
-        io.sockets.emit 'nick'
-          nickname_old: nickname_old
-          nickname: nickname
+    socket.store.data.nickname = nickname
+    io.sockets.emit 'user changed nickname'
 
   socket.on 'avatar', (avatar) ->
-    socket.set 'avatar', avatar, () ->
-      socket.emit 'done'
+    socket.store.data.avatar = avatar
+    io.sockets.emit 'user changed avatar'
 
   socket.on 'who', () ->
     res = for own key, client of io.sockets.clients()
+      avatar: client.store.data.avatar
       nickname: client.store.data.nickname
     socket.emit 'who', res
 
@@ -47,3 +46,6 @@ io.sockets.on 'connection', (socket) ->
 
   socket.on 'whisper', (message) ->
     socket.emit 'secret', message
+
+  socket.on 'disconnect', () ->
+    io.sockets.emit 'user disconnected',

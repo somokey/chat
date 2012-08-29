@@ -5,7 +5,11 @@
 
     <style tyle="text/css">
       #status-cnt { margin-right: 25px; position: absolute; right: 0; top: 40px;}
-      #messages { border: 1px solid black; overflow-y: scroll; position: absolute; left: 0; right: 0; bottom: 30px; top: 60px;}
+      #messages-cnt {background: white; position: absolute; left: 0; right: 0; bottom: 30px; top: 60px;}
+      #talkers { border: 1px solid black; overflow-y: scroll; position: absolute; top: 0; bottom: 80%; left: 0; right: 0;}
+      #talkers > li { line-height: 25px; vertical-align: middle; }
+      #talkers > li > img { vertical-align: top; }
+      #messages { border: 1px solid black; overflow-y: scroll; position: absolute; top: 20%; bottom: 0; left: 0; right: 0;}
       #messages > li { line-height: 25px; vertical-align: middle; }
       #messages > li:nth-of-type(odd) { background-color: #ffcbcb; }
       #messages > li:nth-of-type(even) { background-color: #ffeb9d; }
@@ -18,7 +22,10 @@
   </head>
   <body>
     <h1>Happy World Chat</h1>
-    <ol id="messages" class="unstyled"></ol>
+    <div id="messages-cnt">
+      <ol id="talkers" class="unstyled"></ol>
+      <ol id="messages" class="unstyled"></ol>
+    </div>
     <div id="status-cnt">Status: <span id="status"> Connecting... </span></div>
     <div id="controls">
       <input type="text" autofocus="autofocus" />
@@ -39,9 +46,14 @@
         message_format = (obj) ->
           $('<div/>').append(
             $('<img/>').attr('src', get_image_url_from_avatar obj.avatar)[0].outerHTML +
-            obj.nickname +
+            $('<div/>').text(obj.nickname).html() +
             " ▶ " +
             $('<div/>').text(obj.message).html()).html()
+
+        talker_format = (obj) ->
+          $('<div/>').append(
+            $('<img/>').attr('src', get_image_url_from_avatar obj.avatar)[0].outerHTML +
+            $('<div/>').text(obj.nickname).html()).html()
 
         scroll_bottom = () ->
           $messages.scrollTop $messages.get(0).scrollHeight
@@ -68,17 +80,32 @@
           $('<li>').html(message_format obj).appendTo $messages
           scroll_bottom()
 
-        socket.on 'nick', (obj) ->
-          $('<li>').text("#{obj.nickname_old} renamed to #{obj.nickname}").appendTo $messages
-          scroll_bottom()
-        socket.on 'who', (clients) ->
-          user_list = for own key, client of clients
-            client.nickname
+        socket.on 'who', (objects) ->
+          $talkers.empty()
+          user_list = for key, obj of objects
+            $('<li>').html(talker_format obj).appendTo $talkers
+
+
+        who = ->
+          socket.emit 'who'
+        socket.on 'user changed nickname', ->
+          who()
+        socket.on 'user changed avatar', ->
+          who()
+        socket.on 'user connected', ->
+          who()
+        socket.on 'user disconnected', ->
+          who()
+
+
+
           $('<li>').text("#{user_list.join()} are in here. total #{user_list.length} people.").appendTo $messages
           scroll_bottom()
 
         $input = $ 'input'
         $messages = $ '#messages'
+
+        $talkers = $ '#talkers'
 
         $('button').click ->
           socket.emit $(this).text(), $input.val()
