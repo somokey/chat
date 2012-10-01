@@ -120,6 +120,9 @@
           socket.emit $(this).text(), $input.val()
           $input.val('').focus()
 
+        $noti_switch.click ->
+          $input.focus()
+
         $input.keydown (e) ->
           $('button:first-of-type').click() if e.which == 13
 
