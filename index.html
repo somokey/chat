@@ -28,12 +28,23 @@
     </div>
     <div id="status-cnt">Status: <span id="status"> Connecting... </span></div>
     <div id="controls">
-      <input type="text" autofocus="autofocus" />
-      <button type="button">publish</button>
-      <button type="button">who</button>
-      <button type="button">nick</button>
-      <button type="button">avatar</button>
+      <form class="form-inline">
+        <input type="text" id="input" autofocus="autofocus" />
+        <button type="button">publish</button>
+        <button type="button">who</button>
+        <button type="button">nick</button>
+        <button type="button">avatar</button>
+        <label class="checkbox">
+          <input type="checkbox" id="noti-switch" /> Notification switch
+        </label>
+      </form>
     </div>
+
+    <audio id="noti-audio">
+      <source src="1997.mp3" type="audio/mpeg">
+      <source src="1997.ogg" type="audio/ogg">
+      Your browser does not support the audio element.
+    </audio>
 
     <script src="/socket.io/socket.io.js"></script>
     <script src="//code.jquery.com/jquery-latest.js"></script>
@@ -59,6 +70,12 @@
           $messages.scrollTop $messages.get(0).scrollHeight
 
         $status = $ '#status'
+        $input = $ '#input'
+        $messages = $ '#messages'
+        $noti_switch = $ '#noti-switch'
+        $noti_audio = $ '#noti-audio'
+        $talkers = $ '#talkers'
+
         socket = io.connect()
 
         socket.on 'connect', ->
@@ -94,13 +111,9 @@
           who()
         socket.on 'user connected', ->
           who()
+          $noti_audio.trigger('play')  if $noti_switch.attr('checked')
         socket.on 'user disconnected', ->
           who()
-
-        $input = $ 'input'
-        $messages = $ '#messages'
-
-        $talkers = $ '#talkers'
 
         $('button').click ->
           socket.emit $(this).text(), $input.val()

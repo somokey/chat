@@ -8,6 +8,10 @@ app.listen port
 
 app.get '/', (req, res) ->
   res.sendfile __dirname + '/index.html'
+app.get '/1997.mp3', (req, res) ->
+  res.sendfile __dirname + '/1997.mp3'
+app.get '/1997.ogg', (req, res) ->
+  res.sendfile __dirname + '/1997.ogg'
 
 io.configure () ->
   io.set 'transport', ['xhr-polling']
