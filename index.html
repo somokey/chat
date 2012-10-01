@@ -31,7 +31,6 @@
       <form class="form-inline" onsubmit="return false;">
         <input type="text" id="input" autofocus="autofocus" />
         <button type="button">publish</button>
-        <button type="button">who</button>
         <button type="button">nick</button>
         <button type="button">avatar</button>
         <label class="checkbox">
@@ -48,9 +47,12 @@
 
     <script src="/socket.io/socket.io.js"></script>
     <script src="//code.jquery.com/jquery-latest.js"></script>
+    <script src="//medialize.github.com/jQuery-store/preview/jquery.store.js"></script>
     <script src="//jashkenas.github.com/coffee-script/extras/coffee-script.js"></script>
     <script type="text/coffeescript">
       jQuery ($) ->
+        $.storage = new $.store()
+
         get_image_url_from_avatar = (avatar) ->
           "http://webimg.cafe24.com/img/avatar/C/#{avatar}.gif"
 
@@ -79,8 +81,11 @@
         socket = io.connect()
 
         socket.on 'connect', ->
-          who()
           $status.text 'Connected'
+          who()
+          socket.emit 'nick', $.storage.get('nick') if $.storage.get('nick')?
+          socket.emit 'avatar', $.storage.get('avatar') if $.storage.get('avatar')?
+
 
         socket.on 'disconnect', ->
           $status.text 'Disconnected'
@@ -115,6 +120,12 @@
           $noti_audio.trigger('play')  if $noti_switch.attr('checked')
         socket.on 'user disconnected', ->
           who()
+
+        $('button:contains(nick)').click ->
+          $.storage.set 'nick', $input.val()
+
+        $('button:contains(avatar)').click ->
+          $.storage.set 'avatar', $input.val()
 
         $('button').click ->
           socket.emit $(this).text(), $input.val()
