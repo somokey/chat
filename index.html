@@ -79,6 +79,7 @@
         socket = io.connect()
 
         socket.on 'connect', ->
+          who()
           $status.text 'Connected'
 
         socket.on 'disconnect', ->

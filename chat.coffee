@@ -21,7 +21,7 @@ io.sockets.on 'connection', (socket) ->
   socket.store.data.nickname = '손님' + Math.floor(Math.random() * 100)
   socket.store.data.avatar = '00'
 
-  io.sockets.emit 'user connected'
+  socket.broadcast.emit 'user connected'
 
   socket.on 'publish', (message) ->
     socket.get 'avatar', (err, avatar) ->
