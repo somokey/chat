@@ -1,10 +1,10 @@
 util = require 'util'
-express = require 'express'
-app = express.createServer(express.logger())
+app = require('express')()
+server = require('http').createServer(app)
 port = process.env.PORT || 5000
-io = require('socket.io').listen app
+io = require('socket.io').listen server
 
-app.listen port
+server.listen port
 
 app.get '/', (req, res) ->
   res.sendfile __dirname + '/index.html'

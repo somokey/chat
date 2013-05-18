@@ -48,7 +48,7 @@
     <script src="/socket.io/socket.io.js"></script>
     <script src="//code.jquery.com/jquery-latest.js"></script>
     <script src="//medialize.github.com/jQuery-store/preview/jquery.store.js"></script>
-    <script src="//jashkenas.github.com/coffee-script/extras/coffee-script.js"></script>
+    <script src="http://coffeescript.org/extras/coffee-script.js"></script>
     <script type="text/coffeescript">
       jQuery ($) ->
         $.storage = new $.store()
@@ -60,7 +60,7 @@
           $('<div/>').append(
             $('<img/>').attr('src', get_image_url_from_avatar obj.avatar)[0].outerHTML +
             $('<div/>').text(obj.nickname).html() +
-            " ▶ " +
+            " &#x25B6 " +
             $('<div/>').text(obj.message).html()).html()
 
         talker_format = (obj) ->
