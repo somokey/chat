@@ -13,10 +13,6 @@ app.get '/1997.mp3', (req, res) ->
 app.get '/1997.ogg', (req, res) ->
   res.sendfile __dirname + '/1997.ogg'
 
-#io.configure () ->
-#  io.set 'transport', ['xhr-polling']
-#  io.set 'polling duration', 10
-
 io.sockets.on 'connection', (socket) ->
   socket.store.data.nickname = '손님' + Math.floor(Math.random() * 100)
   socket.store.data.avatar = '00'
