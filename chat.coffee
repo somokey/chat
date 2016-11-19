@@ -30,7 +30,7 @@ io.sockets.on 'connection', (socket) ->
     io.sockets.emit 'publish',
       avatar: socket.store.data.avatar
       nickname: socket.store.data.nickname
-      message: socket.store.data.message
+      message: message
 
   socket.on 'nick', (nickname) ->
     socket.store.data.nickname = nickname
