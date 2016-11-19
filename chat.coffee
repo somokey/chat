@@ -16,7 +16,11 @@ app.use express.static 'public'
 #app.get '/1997.ogg', (req, res) ->
 #  res.sendfile __dirname + '/1997.ogg'
 
+
 io.sockets.on 'connection', (socket) ->
+  socket.store = {}
+  socket.store.data = {}
+
   socket.store.data.nickname = '손님' + Math.floor(Math.random() * 100)
   socket.store.data.avatar = '00'
 
