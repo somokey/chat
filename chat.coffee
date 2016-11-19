@@ -1,5 +1,6 @@
 util = require 'util'
-app = require('express')()
+express = require('express')
+app = express()
 server = require('http').createServer(app)
 port = process.env.PORT || 5000
 io = require('socket.io').listen server
@@ -8,10 +9,12 @@ server.listen port
 
 app.get '/', (req, res) ->
   res.sendfile __dirname + '/index.html'
-app.get '/1997.mp3', (req, res) ->
-  res.sendfile __dirname + '/1997.mp3'
-app.get '/1997.ogg', (req, res) ->
-  res.sendfile __dirname + '/1997.ogg'
+app.use express.static 'public'
+
+#app.get '/1997.mp3', (req, res) ->
+#  res.sendfile __dirname + '/1997.mp3'
+#app.get '/1997.ogg', (req, res) ->
+#  res.sendfile __dirname + '/1997.ogg'
 
 io.sockets.on 'connection', (socket) ->
   socket.store.data.nickname = '손님' + Math.floor(Math.random() * 100)
