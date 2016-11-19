@@ -27,12 +27,10 @@ io.sockets.on 'connection', (socket) ->
   socket.broadcast.emit 'user connected'
 
   socket.on 'publish', (message) ->
-    socket.get 'avatar', (err, avatar) ->
-      socket.get 'nickname', (err, nickname) ->
-        io.sockets.emit 'publish',
-          avatar: avatar
-          nickname: nickname
-          message: message
+    io.sockets.emit 'publish',
+      avatar: socket.store.data.avatar
+      nickname: socket.store.data.nickname
+      message: socket.store.data.message
 
   socket.on 'nick', (nickname) ->
     socket.store.data.nickname = nickname
