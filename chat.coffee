@@ -22,7 +22,7 @@ io.sockets.on 'connection', (socket) ->
   socket.store.data = {}
 
   socket.store.data.nickname = '손님' + Math.floor(Math.random() * 100)
-  socket.store.data.avatar = '00'
+  socket.store.data.avatar = '8_68'
 
   socket.broadcast.emit 'user connected'
 
