@@ -43,7 +43,7 @@ io.sockets.on 'connection', (socket) ->
     io.sockets.emit 'user changed avatar'
 
   socket.on 'who', () ->
-    res = for own key, otherSocket of io.sockets.sockets()
+    res = for own key, otherSocket of io.sockets.sockets
       avatar: otherSocket.store.data.avatar
       nickname: otherSocket.store.data.nickname
     socket.emit 'who', res
