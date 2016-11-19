@@ -43,9 +43,9 @@ io.sockets.on 'connection', (socket) ->
     io.sockets.emit 'user changed avatar'
 
   socket.on 'who', () ->
-    res = for own key, client of io.sockets.clients()
-      avatar: client.store.data.avatar
-      nickname: client.store.data.nickname
+    res = for own key, otherSocket of io.sockets.sockets()
+      avatar: otherSocket.store.data.avatar
+      nickname: otherSocket.store.data.nickname
     socket.emit 'who', res
 
   socket.on 'broadcast', (message) ->
