@@ -60,7 +60,7 @@
 
         message_format = (obj) ->
           message = obj.message
-          message = $('<div/>').text(message).val()
+          message = $('<div/>').text(message).html()
           message = Autolinker.link(message)
           $('<div/>').append(
             $('<img/>').attr('src', get_image_url_from_avatar obj.avatar)[0].outerHTML +
