@@ -48,6 +48,7 @@
     <script src="/socket.io/socket.io.js"></script>
 
     <script src="//code.jquery.com/jquery-latest.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/autolinker/1.3.4/Autolinker.min.js"></script>
     <script src="/jquery.store.js"></script>
     <script src="/coffee-script.js"></script>
     <script type="text/coffeescript">
@@ -58,11 +59,14 @@
           "/avatar/#{avatar}.png"
 
         message_format = (obj) ->
+          message = obj.message
+          message = $('<div/>').text(message).val()
+          message = Autolinker.link(message)
           $('<div/>').append(
             $('<img/>').attr('src', get_image_url_from_avatar obj.avatar)[0].outerHTML +
             $('<div/>').text(obj.nickname).html() +
             " &#x25B6 " +
-            $('<div/>').text(obj.message).html()).html()
+            $('<div/>').html(obj.message).html()).html()
 
         talker_format = (obj) ->
           $('<div/>').append(
